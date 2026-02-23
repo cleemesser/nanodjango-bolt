@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nanodjango-bolt"
+version = "0.1.1"
+description = "django-bolt plugin for nanodjango single-file apps"
+requires-python = ">=3.8"
+dependencies = [
+    "nanodjango",
+    "django-bolt",
+]
+
+[project.entry-points."nanodjango"]
+bolt = "nanodjango_bolt"
+
+[tool.setuptools.packages.find]
+include = ["nanodjango_bolt*"]
