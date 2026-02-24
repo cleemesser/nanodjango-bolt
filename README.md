@@ -214,3 +214,16 @@ async def hello(request):
 - Python >= 3.8
 - nanodjango
 - django-bolt
+
+## Motivation
+I learned about django-bolt recently and wanted to try out in different
+scenarios. Using single-file apps is great for this so I started working it out
+and will use it to see how well django-bolt plays with realtime and streaming
+web apps and apis.
+
+This is still a work in progress.
+
+## Thanks
+The many authors and contributors to django, django-bolt Thanks to claude code
+made this much more practical to make a tool that would make my life a little
+better.
