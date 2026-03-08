@@ -91,22 +91,66 @@ automatically by nanodjango's pluggy-based plugin system:
 
 ## Running the server
 
-django-bolt runs a separate Rust/Actix server, not Django's dev server.
+django-bolt runs a Rust/Actix server, not Django's dev server.
 
-**Bolt only** (API routes served by Rust):
+**Single port** (Django views + Bolt API together):
 
-```bash
-python myapp.py runbolt --port 8000
+Use `mount_django` to serve everything on one port. BoltAPI
+routes are handled natively by Actix; all other requests are forwarded to
+Django's ASGI application through an in-process bridge.
+
+```python
+from nanodjango import Django
+from nanodjango_bolt import BoltAPI
+
+app = Django()
+api = BoltAPI()
+
+@app.route("/")
+def home(request):
+    return "<h1>Hello from Django</h1>"
+
+@api.get("/api/hello")
+async def hello(request):
+    return {"message": "hello from bolt"}
+
+# If you want to serve the django app as well
+
+api.mount_django(r"/") # this is part of django-bolt and allows for serving an ASGI
+
+# Must be called AFTER all boltAPI routes are defined
 ```
 
-**Both servers** (Django views + Bolt API on separate ports):
+Note also, because the file must be importable, do not name it with
+non-importable characters like '-'.  that is, call it `myapp.py` not `my-app.py`
 
+
+**Bolt only** (API routes served by Rust, no Django view fallback):
+
+```bash
+nanodjango manage myapp.py runbolt --dev --port 8000
+# note if you have bolt.mount_django("/path") # then django will be served as well via http
+```
+
+**Separate ports** (Django views + Bolt API on different ports):
+development mode
 ```bash
 # Terminal 1 -- Django views
 nanodjango run myapp.py --host localhost:8080
-
+# or can do nanodjango manage myapp.py runserver --host localhost:8080
 # Terminal 2 -- Bolt API
-python myapp.py runbolt --port 8001
+nandodjango myapp.py runbolt --port 8001
+```
+
+production mode:
+```bash
+# terminal 1
+nanodjango serve myapp.py --host localhost:8080 # the django side with uvicorn
+
+# second terminal
+nanodjango manage myapp.py runbolt --port 8001 # [options for host port]
+
+# setup of reverse proxy to serve to internet as usual
 ```
 
 ### runbolt options
@@ -222,8 +266,9 @@ and will use it to see how well django-bolt plays with realtime and streaming
 web apps and apis.
 
 This is still a work in progress.
+The next thing to do is to think about how to implement the "to full django" process that nanodjango offers.
 
 ## Thanks
-The many authors and contributors to django, django-bolt Thanks to claude code
+The many authors and contributors to django, django-bolt. Credit to claude code which helped with analyzing the nanodjango project.
 made this much more practical to make a tool that would make my life a little
 better.

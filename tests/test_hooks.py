@@ -63,7 +63,9 @@ class TestConvertBuildAppApi:
         resolver = _make_resolver()
         extra_src = []
 
-        result_resolver, result_src = convert_build_app_api(converter, resolver, extra_src)
+        result_resolver, result_src = convert_build_app_api(
+            converter, resolver, extra_src
+        )
 
         resolver.add_object.assert_any_call("bolt")
         assert len(result_src) == 1
@@ -133,7 +135,10 @@ async def handler(request):
 
             convert_build_app_api(converter, resolver, extra_src)
 
-            resolver.add_object.assert_any_call("handler"), f"Failed for method: {method}"
+            (
+                resolver.add_object.assert_any_call("handler"),
+                f"Failed for method: {method}",
+            )
             assert len(extra_src) == 2, f"Failed for method: {method}"
 
     def test_ignores_non_bolt_functions(self):
@@ -205,7 +210,9 @@ async def route_b(request):
         resolver = _make_resolver()
         extra_src = []
 
-        result_resolver, result_src = convert_build_app_api(converter, resolver, extra_src)
+        result_resolver, result_src = convert_build_app_api(
+            converter, resolver, extra_src
+        )
 
         resolver.add_object.assert_not_called()
         assert len(result_src) == 0
@@ -244,3 +251,57 @@ async def hello(request):
 
         resolver.add_object.assert_any_call("hello")
         assert len(extra_src) == 2
+
+    def test_detects_mount_django(self):
+        source = """\
+bolt = BoltAPI()
+
+@bolt.get("/api/hello")
+async def hello(request):
+    return {"message": "hello"}
+
+bolt.mount_django("/")
+"""
+        converter = _make_converter(source)
+        resolver = _make_resolver()
+        extra_src = []
+
+        convert_build_app_api(converter, resolver, extra_src)
+
+        # BoltAPI assignment + handler + mount_django call
+        assert len(extra_src) == 3
+        assert any("mount_django" in s for s in extra_src)
+
+    def test_detects_mount(self):
+        source = """\
+bolt = BoltAPI()
+other_api = BoltAPI()
+
+bolt.mount("/other", other_api)
+"""
+        converter = _make_converter(source)
+        resolver = _make_resolver()
+        extra_src = []
+
+        convert_build_app_api(converter, resolver, extra_src)
+
+        # Both BoltAPI assignments + mount call
+        assert len(extra_src) == 3
+        assert any("mount" in s for s in extra_src)
+
+    def test_ignores_mount_on_non_bolt_obj(self):
+        """mount_django on a non-BoltAPI object should not be detected."""
+        source = """\
+bolt = BoltAPI()
+other = SomeOtherClass()
+
+other.mount_django("/")
+"""
+        converter = _make_converter(source)
+        resolver = _make_resolver()
+        extra_src = []
+
+        convert_build_app_api(converter, resolver, extra_src)
+
+        # Only the BoltAPI assignment
+        assert len(extra_src) == 1

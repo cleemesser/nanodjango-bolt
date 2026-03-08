@@ -125,6 +125,7 @@ class TestHTTPMethodDecorators:
     def test_post_triggers_configure(self):
         bolt, mod = self._make_bolt_in_module()
         try:
+
             @bolt.post("/test")
             async def handler(request):
                 return {"ok": True}
@@ -136,6 +137,7 @@ class TestHTTPMethodDecorators:
     def test_put_triggers_configure(self):
         bolt, mod = self._make_bolt_in_module()
         try:
+
             @bolt.put("/test")
             async def handler(request):
                 return {"ok": True}
@@ -147,6 +149,7 @@ class TestHTTPMethodDecorators:
     def test_patch_triggers_configure(self):
         bolt, mod = self._make_bolt_in_module()
         try:
+
             @bolt.patch("/test")
             async def handler(request):
                 return {"ok": True}
@@ -158,6 +161,7 @@ class TestHTTPMethodDecorators:
     def test_delete_triggers_configure(self):
         bolt, mod = self._make_bolt_in_module()
         try:
+
             @bolt.delete("/test")
             async def handler(request):
                 return {"ok": True}
@@ -169,6 +173,7 @@ class TestHTTPMethodDecorators:
     def test_websocket_triggers_configure(self):
         bolt, mod = self._make_bolt_in_module()
         try:
+
             @bolt.websocket("/test")
             async def handler(request):
                 pass
