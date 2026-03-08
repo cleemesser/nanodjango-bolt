@@ -19,14 +19,16 @@ from nanodjango_bolt import BoltAPI
 app = Django()
 bolt = BoltAPI()
 
+
 # this is a django route (wsgi)
 @app.route("/")
 def home(request):
-    return (
-        "<h1>nanodjango-bolt example</h1><p>Try /api/hello or /api/greet?name=World</p>"
-    )
+    return r"""<h1>nanodjango-bolt example</h1><p>Try <a href="/api/hello">/api/hello</a> or
+         <a href="/api/greet?name=World">/api/greet?name=World</a></p>"""
+
 
 # here are the bolt api routes
+
 
 @bolt.get("/api/hello")
 async def hello(request):
@@ -34,26 +36,15 @@ async def hello(request):
 
 
 @bolt.get("/api/greet")
-async def greet(request):
-    name = request.GET.get("name", "stranger")
+async def greet(name: str):
     return {"message": f"hello, {name}!"}
 
 
 @bolt.post("/api/echo")
-async def echo(request):
-    import json
-
-    body = json.loads(request.body)
-    return {"you_sent": body}
+async def echo(msg: str):
+    return {"you_sent": msg}
 
 
 # Register catch-all AFTER all bolt routes so they take priority.
 # Unmatched requests (like /) are forwarded to Django's ASGI app.
-bolt.mount_django(r'/')
-
-# if __name__ == "__main__":
-#     import sys
-#     from django.core.management import execute_from_command_line
-
-#     execute_from_command_line(sys.argv)
-# o
+bolt.mount_django(r"/")

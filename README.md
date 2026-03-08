@@ -6,7 +6,7 @@ Django apps. django-bolt gives you a production-ready Rust/Actix web server
 without needing gunicorn, uvicorn, or a reverse proxy for your API routes.
 
 This plugin handles all the settings wiring automatically -- you just import
-`BoltAPI` and start defining routes.
+`BoltAPI`from nanodjango_bolt  and start defining routes.
 
 ## Installation
 
@@ -253,9 +253,17 @@ async def hello(request):
     return {"message": "hello"}
 ```
 
+## automatically convert to full django project
+following the nanodjango way, when project outgrows its single file , you can
+convert it to a full Django site which uses [django-bolt](https://github.com/dj-bolt/django-bolt):
+
+```bash
+nanodjango convert myapp.py /path/to/project  --name=myprojectname
+```
+
 ## Requirements
 
-- Python >= 3.8
+- Python >= 3.12
 - nanodjango
 - django-bolt
 
@@ -267,6 +275,11 @@ web apps and apis.
 
 This is still a work in progress.
 The next thing to do is to think about how to implement the "to full django" process that nanodjango offers.
+
+## Todo:
+- change name of project to follow nanodjango recommendations: `nanodjango-plugin-bolt`?
+- see if makes sense to integrate plugin into django-bolt itself?
+
 
 ## Thanks
 The many authors and contributors to django, django-bolt. Credit to claude code which helped with analyzing the nanodjango project.
