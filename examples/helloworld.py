@@ -47,4 +47,5 @@ async def echo(msg: str):
 
 # Register catch-all AFTER all bolt routes so they take priority.
 # Unmatched requests (like /) are forwarded to Django's ASGI app.
+
 bolt.mount_django(r"/")
