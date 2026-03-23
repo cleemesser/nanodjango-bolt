@@ -2,9 +2,8 @@
 # requires-python = ">=3.12"
 # dependencies = ["nanodjango-bolt"]
 # ///
-# uv run counter.py should run as well or "pipx run"
 # nanodjango manage myapp.py migrate
-# nanodjanog manage myapp.py runbolt --dev
+# nanodjango manage myapp.py runbolt --dev
 
 from nanodjango import Django
 from nanodjango_bolt import BoltAPI
