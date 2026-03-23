@@ -8,10 +8,10 @@ version = "0.1.2"
 description = "django-bolt plugin for nanodjango single-file apps"
 requires-python = ">=3.12"
 dependencies = [
-  "nanodjango @ file:///Users/clee/code/datastar_learn/ext/nanodjango",
-  #    "django-bolt @ git+https://github.com/dj-bolt/django-bolt.git",
-  "django-bolt @ file:///Users/clee/code/datastar_learn/ext/django-bolt",
-
+  # "nanodjango",  # use my fork for development
+  "nanodjango @  git+https://github.com/cleemesser/nanodjango.git",
+  # "django-bolt",
+  "django-bolt @ git+https://github.com/dj-bolt/django-bolt.git",
 ]
 
 [project.entry-points."nanodjango"]
