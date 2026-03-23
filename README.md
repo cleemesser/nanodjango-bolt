@@ -1,4 +1,4 @@
-# nanodjango-bolt
+# nanodjango-bolt :  a prototype implementation
 
 A [nanodjango](https://github.com/radiac/nanodjango) plugin that integrates
 [django-bolt](https://github.com/nicholasgasior/django-bolt) into single-file
@@ -43,13 +43,7 @@ async def create_item(request):
     return {"id": 1, "status": "created"}
 ```
 
-Run the bolt server:
-
-```bash
-python myapp.py runbolt --port 8000
-```
-
-Or use nanodjango's CLI:
+Run the bolt server with nanodjango's CLI:
 
 ```bash
 nanodjango manage myapp.py runbolt --port 8000
