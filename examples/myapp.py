@@ -1,3 +1,8 @@
+# /// script
+# requires-python = ">=3.12"
+# dependencies = ["nanodjango-bolt"]
+# ///
+# uv run counter.py should run as well or "pipx run"
 # nanodjango manage myapp.py migrate
 # nanodjanog manage myapp.py runbolt --dev
 
