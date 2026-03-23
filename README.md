@@ -8,11 +8,19 @@ without needing gunicorn, uvicorn, or a reverse proxy for your API routes.
 This plugin handles all the settings wiring automatically -- you just import
 `BoltAPI`from nanodjango_bolt  and start defining routes.
 
-## Installation
+## Development install
+```
+pip install git+https://github.com/cleemesser/nanodjango-bolt.git
+```
+
+## (Eventual Standard) Installation
+- has not been published to pypi yet
+- as may be better to incorporate directly in django-bolt itself
 
 ```bash
 pip install nanodjango-bolt
 ```
+This will install nanodjango and its command line script
 
 Or with uv:
 
@@ -41,6 +49,8 @@ async def hello(request):
 @bolt.post("/api/items")
 async def create_item(request):
     return {"id": 1, "status": "created"}
+
+bolt.mount_django(r"/") # have bolt serve the django app too
 ```
 
 Run the bolt server with nanodjango's CLI:

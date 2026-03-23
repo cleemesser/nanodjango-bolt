@@ -24,7 +24,7 @@ async def hello(request):
 
 @bolt.post("/api/items")
 async def create_item():
-    return {"id": 1, "status": "created"} # fake creating an item
+    return {"id": 1, "status": "created"}  # fake creating an item
 
 
 bolt.mount_django(r"/")  # allow bolt to also serve the django app
