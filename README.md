@@ -1,7 +1,7 @@
 # nanodjango-bolt :  a prototype implementation
 
 A [nanodjango](https://github.com/radiac/nanodjango) plugin that integrates
-[django-bolt](https://github.com/nicholasgasior/django-bolt) into single-file
+[django-bolt](https://github.com/dj-bolt/django-bolt) into single-file
 Django apps. django-bolt gives you a production-ready Rust/Actix web server
 without needing gunicorn, uvicorn, or a reverse proxy for your API routes.
 
