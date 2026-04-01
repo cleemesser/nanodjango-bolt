@@ -5,7 +5,7 @@ Both Django views and BoltAPI routes are served on the same port by Actix.
 Django views go through the ASGI bridge; BoltAPI routes are handled natively.
 
 Run:
-    python examples/helloworld.py runbolt --port 8000
+    nanodjango manage helloworld.py runbolt
 
 Then visit:
     http://localhost:8000/           (Django view)
