@@ -51,3 +51,14 @@ By default, this calls `django.core.asgi.get_asgi_application()`.
 """
 
 bolt.mount_django("/")
+
+if __name__ == "__main__":
+    import sys
+
+    # needs to be imported after other things are configured
+    # (single-file django app style)
+    from django.core.management import (  # noqa: E402
+        execute_from_command_line,
+    )
+
+    execute_from_command_line(sys.argv)

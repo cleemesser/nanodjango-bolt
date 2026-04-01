@@ -3,7 +3,7 @@
 # /// script
 # dependencies = ["nanodjango", "nanodjango-bolt"]
 # ///
-
+import asyncio
 from nanodjango import Django
 from nanodjango_bolt import BoltAPI
 from django_bolt.responses import StreamingResponse
@@ -14,21 +14,26 @@ from django.db import models
 app = Django()
 bolt = BoltAPI()
 
+# In your django-bolt api.py
+
 
 @bolt.get("/stream")
 async def stream(request):
-    """send 5 messages, one every second, then end the stream"""
-    import asyncio
+    """send 5 messages, one every 0.5 second, then end the stream"""
 
-    async def generate():
+    async def event_generator():
         for i in range(5):
-            yield f"data: message {i}\n\n".encode()
-            await asyncio.sleep(1)
+            yield f"data: message {i} asyncio.sleep(0.5)\n\n".encode()
+            await asyncio.sleep(0.5)
 
     return StreamingResponse(
-        generate(),
+        event_generator(),
         media_type="text/event-stream",
-        headers={"Cache-Control": "no-cache"},
+        headers={
+            # "Cache-Control": "no-cache",
+            # "X-Accel-Buffering" : 'no', # this stops nginx buffering
+            "Content-Encoding": "identity",  # this last header is essential to see streaming, it tells django-bolt to leave things unchanged
+        },
     )
 
 
@@ -66,5 +71,16 @@ def count(request):
 
 bolt.mount_django("/")
 
+
 if __name__ == "__main__":
-    app.run()  # run the django app, not sure if there is an equivalent call for django-bolt
+    import sys
+
+    # needs to be imported after other things are configured
+    # (single-file django app style)
+    from django.core.management import (  # noqa: E402
+        execute_from_command_line,
+    )
+
+    execute_from_command_line(sys.argv)
+
+    #app.run()  # run the django app, not sure if there is an equivalent call for django-bolt
