@@ -23,7 +23,7 @@ async def stream(request):
     return StreamingResponse(
         generate(),
         media_type="text/event-stream",
-        headers={"Cache-Control": "no-cache"},
+        headers={"Content-Encoding": "identity", "Cache-Control": "no-cache"},
     )
 
 
