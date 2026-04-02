@@ -177,12 +177,14 @@ libraries like [datastar](https://data-star.dev/):
 ```python
 from nanodjango import Django
 from nanodjango_bolt import BoltAPI
+from django_bolt.middleware import no_compress
 from django_bolt.responses import StreamingResponse
 
 app = Django()
 bolt = BoltAPI()
 
 @bolt.get("/stream")
+@no_compress
 async def stream(request):
     import asyncio
 
@@ -194,10 +196,24 @@ async def stream(request):
     return StreamingResponse(
         generate(),
         media_type="text/event-stream",
-        headers={"Cache-Control": "no-cache"},
     )
 ```
+Note for streaming responses django-bolt/Actix will compression and batch them
+together if you don't disable compression.
 
+setting the headers is an alternative method for stopping compression and if you
+are behind a nginx, you might need the "X-Accel-Buffering" header set
+```python
+StreamingResponse(
+    generate(),
+    media_type="text/event-stream",
+    headers={
+        "Content-Encoding": "identity", # disable bolt middleware manipulations
+        "Cache-Control": "no-cache", # don't cache the other responses
+        "X-Accel-Buffering": "no", # tell nginx not to buffer
+    }
+    )
+```
 ## Converting to a full project
 
 When you outgrow the single-file format:
@@ -264,6 +280,9 @@ convert it to a full Django site which uses [django-bolt](https://github.com/dj-
 ```bash
 nanodjango convert myapp.py /path/to/project  --name=myprojectname
 ```
+
+This is working, but due to how nanodjango is written, you will get superfluous
+code refering to django-ninja calls.
 
 ## Requirements
 
