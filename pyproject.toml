@@ -19,8 +19,8 @@ bolt = "nanodjango_bolt"
 [tool.setuptools.packages.find]
 include = ["nanodjango_bolt*"]
 
-[tool.uv.sources]
-nanodjango = { path = "nanodjango", editable = true }
+# [tool.uv.sources]
+# nanodjango = { path = "nanodjango", editable = true }
 
 [dependency-groups]
 dev = [
