@@ -5,6 +5,10 @@ Both Django views and BoltAPI routes are served on the same port by Actix.
 Django views go through the ASGI bridge; BoltAPI routes are handled natively.
 
 Run:
+    uv run helloworld runbolt  # or use pipx instead of uvx
+
+    OR,  if you have nanodjango bolt already installed in a python environment
+
     nanodjango manage helloworld.py runbolt
 
 Then visit:
@@ -12,7 +16,11 @@ Then visit:
     http://localhost:8000/api/hello  (Bolt API)
     http://localhost:8000/api/greet?name=World
 """
-
+# /// script
+# dependencies = [
+#   "nanodjango-bolt @ git+https://github.com/cleemesser/nanodjango-bolt.git",
+# ]
+# ///
 from nanodjango import Django
 from nanodjango_bolt import BoltAPI
 
@@ -61,5 +69,4 @@ if __name__ == "__main__":
     from django.core.management import (  # noqa: E402
         execute_from_command_line,
     )
-
     execute_from_command_line(sys.argv)
