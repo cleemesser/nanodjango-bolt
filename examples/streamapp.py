@@ -32,27 +32,10 @@ def hello_world(request):
     return "<p>Hello, World!</p> <a href='/stream'>Go to stream</a>"
 
 
-"""
-Headers and query strings are forwarded in the ASGI scope.
-
-## `mount_django()`
-
-Mount Django's ASGI app under a prefix:
-
-```python
-from django_bolt import BoltAPI
-
-api = BoltAPI()
-api.mount_django("/django")
-```
-
-By default, this calls `django.core.asgi.get_asgi_application()`.
-"""
-
-bolt.mount_django("/")
+bolt.mount_django("/") # use bolt to serve django asgi app
 
 if __name__ == "__main__":
-    import sys
+    import sys # noqa: E402
 
     # needs to be imported after other things are configured
     # (single-file django app style)
